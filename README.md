@@ -6,8 +6,10 @@ I’m interested in solving, given an image, (binary) classifying the emotion th
 
 ## Dataset
 Download link: https://www.dropbox.com/sh/4qaoqs77c9e5muh/AABBw07ozE__2Y0LVQHVL-8ca?dl=0 
+
 I’ll be using Open Affective Standardized Image Set(OASIS) dataset for this final project. OASIS dataset is an open-access online stimulus set containing 900 color images depicting a broad spectrum of themes, including humans, animals, objects, and scenes, along with normative ratings on two affective dimensions—valence (i.e., the degree of positive or negative affective response that the image evokes) and arousal (i.e., the intensity of the affective response that the image evokes)[1]
 
+Captions link: http://zmana-caption.herokuapp.com/captioner/ 
 
 ## Setup instructions
 
@@ -38,6 +40,18 @@ Note that every time you want to work on this project, you should run *conda act
 After installing Anaconda, creating the virtual environment, activating that environment, then cd to the project root directory, and run the below command to install project dependencies:
 ```
 pip install -r requirements.txt  # Install dependencies
+```
+
+Now you can install PyTorch:
+```
+conda install pytorch torchvision -c pytorch
+```
+
+## Download OASIS dataset
+Inside project root directory:
+```
+cd dataset
+./get_datasets.sh
 ```
 
 
