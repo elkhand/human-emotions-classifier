@@ -5,7 +5,7 @@ CS231n Final project
 I’m interested in solving, given an image, (binary) classifying the emotion the image evokes has positive or a negative valence (affective response) on viewer person. I’ll be evaluating image pixels as a feature, caption as a feature, and both features together, how they are affecting the accuracy of the model.
 
 ## Dataset
-Download link: https://www.dropbox.com/home/OASIS_database_2016 
+Download link: https://www.dropbox.com/sh/4qaoqs77c9e5muh/AABBw07ozE__2Y0LVQHVL-8ca?dl=0 
 I’ll be using Open Affective Standardized Image Set(OASIS) dataset for this final project. OASIS dataset is an open-access online stimulus set containing 900 color images depicting a broad spectrum of themes, including humans, animals, objects, and scenes, along with normative ratings on two affective dimensions—valence (i.e., the degree of positive or negative affective response that the image evokes) and arousal (i.e., the intensity of the affective response that the image evokes)[1]
 
 
