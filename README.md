@@ -4,6 +4,8 @@ CS231n Final project
 ## Problem
 I’m interested in solving, given an image, (binary) classifying the emotion the image evokes has positive or a negative valence (affective response) on viewer person. I’ll be evaluating image pixels as a feature, caption as a feature, and both features together, how they are affecting the accuracy of the model.
 
+Writeup (draft version): https://docs.google.com/document/d/1P8DjZgdnyYcABErRjv0Vk2UZL0CX2cWWogv5IQyjCK4/edit#
+
 ## Dataset
 Download link: https://www.dropbox.com/sh/4qaoqs77c9e5muh/AABBw07ozE__2Y0LVQHVL-8ca?dl=0 
 
@@ -46,6 +48,16 @@ Now you can install PyTorch:
 ```
 conda install pytorch torchvision -c pytorch
 ```
+
+
+Now you can install VADER:
+```
+pip install vaderSentiment
+```
+
+VADER (Valence Aware Dictionary and sEntiment Reasoner) is a lexicon and rule-based sentiment analysis tool that is specifically attuned to sentiments expressed in social media. 
+
+VADER source code: https://github.com/cjhutto/vaderSentiment 
 
 ## Download OASIS dataset
 Inside project root directory:
