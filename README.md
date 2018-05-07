@@ -13,6 +13,32 @@ I’ll be using Open Affective Standardized Image Set(OASIS) dataset for this fi
 
 Captions link: http://zmana-caption.herokuapp.com/captioner/ 
 
+### Auto Generated Captions using Show and Tell: A Neural Image Caption Generator
+
+Git repo: https://github.com/tensorflow/models/tree/master/research/im2txt
+
+A TensorFlow implementation of the image-to-text model described in the paper:
+
+"Show and Tell: Lessons learned from the 2015 MSCOCO Image Captioning Challenge."
+
+Full text available at: http://arxiv.org/abs/1609.06647
+
+The Show and Tell model is an example of an encoder-decoder neural network. It works by first "encoding" an image into a fixed-length vector representation, and then "decoding" the representation into a natural language description.
+
+The image encoder is a deep convolutional neural network. This type of network is widely used for image tasks and is currently state-of-the-art for object recognition and detection. Our particular choice of network is the Inception v3 image recognition model pretrained on the ILSVRC-2012-CLS image classification dataset.
+
+The decoder is a long short-term memory (LSTM) network. This type of network is commonly used for sequence modeling tasks such as language modeling and machine translation. In the Show and Tell model, the LSTM network is trained as a language model conditioned on the image encoding.
+
+Words in the captions are represented with an embedding model. Each word in the vocabulary is associated with a fixed-length vector representation that is learned during training.
+
+![Show and Tell Architecture](show_and_tell_architecture.png)
+
+Auto generated captions can be found here:
+
+```
+dataset/metadata/auto_generated_captions.txt
+```
+
 ## Setup instructions
 
 This setup instructions will resemble CS231N setup instructions: http://cs231n.github.io/setup-instructions/ 
