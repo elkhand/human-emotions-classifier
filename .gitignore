@@ -101,4 +101,4 @@ ENV/
 .mypy_cache/
 
 dataset/images/
-dataset/metadata/caption.csv
+#dataset/metadata/caption.csv
