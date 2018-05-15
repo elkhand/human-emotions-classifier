@@ -91,6 +91,19 @@ def label_image_captions(imageIdToCaption):
     print("Total skipped images", skipCount)
     return imageIdToLabel
 
+def get_vader_compound_scores(imageIdToCaption):
+    """this function returns vader scores for histogram plotting"""
+    vaderScores = []
+    for imageId in imageIdToCaption:
+        caption = imageIdToCaption[imageId]
+        vaderScores.append(get_vader_compound_score_per_caption(caption))
+    return vaderScores
+
+def get_vader_compound_score_per_caption(caption):
+    analyzer = SentimentIntensityAnalyzer()
+    scores = analyzer.polarity_scores(caption)
+    return scores['compound']
+
 def get_label_for_caption_via_vader(caption):
     analyzer = SentimentIntensityAnalyzer()
     scores = analyzer.polarity_scores(caption)
