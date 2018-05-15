@@ -3594,3 +3594,7 @@ Captions for image Nude man 8.jpg:
   0) a man standing on a beach holding a surfboard . <S> <S> . <S> . <S> <S> . (p=0.000019)
   1) a man standing on a beach holding a surfboard . <S> <S> . <S> <S> . <S> <S> (p=0.000013)
   2) a man standing on a beach with a surfboard . <S> <S> . <S> <S> . <S> <S> (p=0.000007)
+Captions for image Monkey 3.jpg:
+  0) a monkey sitting thoughtful . <S> <S> <S> <S> <S> <S> <S> <S> <S> (p=0.000022)
+  1) a monkey sitting thoughtful . <S> <S> <S> <S> <S> <S> <S> <S> <S> (p=0.000022)
+  2) a monkey sitting thoughtful . <S> <S> <S> <S> <S> <S> <S> <S> . (p=0.000022)
