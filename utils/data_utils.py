@@ -32,11 +32,11 @@ def read_oasis_csv_into_dataframe(oasis_csv_path):
     """read OASIS.csv into data frame"""
     return pd.read_csv(oasis_csv_path,header = 0, names=["id","theme","category","source",
                                                 "valence_mean","valence_std", "valence_n",
-                                               "arousal_mean","arousal_std", "arousal_n",])
+                                               "arousal_mean","arousal_std", "arousal_n",]) #,  index_col="id"
 
 def read_caption_csv_into_dataframe(caption_csv_path, delimeter=","):
     """read caption.csv into data frame"""
-    return pd.read_csv(caption_csv_path, header=0, names=["id","image_title","caption",], sep=delimeter)    
+    return pd.read_csv(caption_csv_path, header=0, names=["id","image_title","caption",],  sep=delimeter) # index_col="id",   
 
 def get_caption_to_label(caption_csv_path,delimeter=","):
     imageIdToCaption = get_image_id_to_caption(caption_csv_path,delimeter)
