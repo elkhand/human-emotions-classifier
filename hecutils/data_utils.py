@@ -1,4 +1,6 @@
 from __future__ import print_function
+import hecutils.scoring_utils as sc
+
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import csv
 import sys
@@ -7,10 +9,8 @@ import pandas as pd
 import numpy as np
 import math
 import os
-from utils.scoring_utils import *
+
 import nltk
-# nltk.download('stopwords')
-# nltk.data.path.append('~/nltk_data')
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
@@ -21,9 +21,9 @@ def print_polarity_scores(image_captions):
     captionToLabels = {}
     for caption in image_captions:
         scores = analyzer.polarity_scores(caption)
-        label = convert_compound_score_to_string(scores['compound'])
+        label = sc.convert_compound_score_to_string(scores['compound'])
         print("{} \n {} {}\n".format(caption, str(scores),label))
-        label = convert_compound_score_to_label(scores['compound'])
+        label = sc.convert_compound_score_to_label(scores['compound'])
         captionToLabels[caption] = label
     return captionToLabels        
 
@@ -60,6 +60,12 @@ def get_image_title_to_image_id(oasis_csv_path):
     """read OASIS.csv into data frame and return {imageTitle : imageId}"""
     oasis_df = read_oasis_csv_into_dataframe(oasis_csv_path)
     return dict(zip(oasis_df.theme,oasis_df.id))
+
+
+def get_image_id_to_image_title(oasis_csv_path):
+    """read OASIS.csv into data frame and return {imageTitle : imageId}"""
+    oasis_df = read_oasis_csv_into_dataframe(oasis_csv_path)
+    return dict(zip(oasis_df.id,oasis_df.theme))
 
 def get_image_id_to_caption(caption_csv_path,delimeter=","):
     """read caption csv into dataframe and return {imageid : caption}"""
@@ -107,7 +113,7 @@ def get_vader_compound_score_per_caption(caption):
 def get_label_for_caption_via_vader(caption):
     analyzer = SentimentIntensityAnalyzer()
     scores = analyzer.polarity_scores(caption)
-    label = convert_compound_score_to_label(scores['compound'])
+    label = sc.convert_compound_score_to_label(scores['compound'])
     return label
 
 def clean_auto_generated_captions(inputPathToAutoGenCaptions, outputPathToAutoGenCaptions, oasis_csv_path):

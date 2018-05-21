@@ -1,8 +1,11 @@
 from __future__ import print_function
+#import hecutils.data_utils as dt
+import hecutils.plotting_utils as pt
 import math
 import sys
 from sklearn.metrics import f1_score
-from utils.plotting_utils import *
+
+
 
 def evaluate_score(score, isStrResult, neutralLow, neutralHigh):
     if score < neutralHigh and score > neutralLow:
@@ -66,7 +69,7 @@ def get_accuracy(imageIdToLabel, imageIdToLabelFromCaptions, titleOfConfusionMat
             negCorrect += incr
     y_true, y_pred = get_labels(imageIdToLabel, imageIdToLabelFromCaptions)
     f1Score = f1_score(y_true, y_pred, average=None)
-    plot_confusion_matrix_from_labels(y_true, y_pred, titleOfConfusionMatrix)
+    pt.plot_confusion_matrix_from_labels(y_true, y_pred, titleOfConfusionMatrix)
     #print("labels in f1 score are in this order [negative, neutral, positive]")
     # labels in f1 score are in this order [negative, neutral, positive]
     result = { "total_accuracy": totalCorrect*100/total ,"pos_accuracy":posCorrect*100/totalPos,
