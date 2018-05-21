@@ -79,6 +79,13 @@ def get_accuracy(imageIdToLabel, imageIdToLabelFromCaptions, titleOfConfusionMat
     result["f1_score_pos"] = f1Score[2]
     return result
 
+def print_f1_score(f1ScoreDict):
+    result = {}
+    result["f1_score_neg"] = round(f1ScoreDict[0],2)
+    result["f1_score_neut"] = round(f1ScoreDict[1],2)
+    result["f1_score_pos"] = round(f1ScoreDict[2],2)
+    print(result)
+
 def get_labels(trueImageIdToLabel, imageIdToLabelFromCaptions):
     y_true = []
     y_pred = []
