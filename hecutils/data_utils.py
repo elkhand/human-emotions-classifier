@@ -36,7 +36,7 @@ def read_oasis_csv_into_dataframe(oasis_csv_path):
 
 def read_caption_csv_into_dataframe(caption_csv_path, delimeter=","):
     """read caption.csv into data frame"""
-    return pd.read_csv(caption_csv_path, header=0, names=["id","image_title","caption",],  sep=delimeter) # index_col="id",   
+    return pd.read_csv(caption_csv_path, header=0, names=["id","image_title","caption"],  sep=delimeter)
 
 def get_caption_to_label(caption_csv_path,delimeter=","):
     imageIdToCaption = get_image_id_to_caption(caption_csv_path,delimeter)
@@ -67,19 +67,26 @@ def get_image_id_to_image_title(oasis_csv_path):
     oasis_df = read_oasis_csv_into_dataframe(oasis_csv_path)
     return dict(zip(oasis_df.id,oasis_df.theme))
 
-def get_image_id_to_caption(caption_csv_path,delimeter=","):
+def correct_captions_csv(caption_csv_path, oasis_csv_path,correct_caption_csv_path, delimeter=","):
+    #Cannot do this as some captions include comma
+    caption_df = read_caption_csv_into_dataframe(caption_csv_path, ",")
+    imageTitleToImageIdOASIS = get_image_title_to_image_id(oasis_csv_path)
+    caption_df["image_title"] = caption_df["image_title"].apply(lambda x: x[:x.find(".")])
+    imageTitleToCaption =  dict(zip(caption_df.image_title, caption_df.caption))
+    #print("imageTitleToImageIdOASIS",imageTitleToImageIdOASIS)
+    #print("imageTitleToImageCaptionFromCaptions",imageTitleToImageCaptionFromCaptions)
+    with open(correct_caption_csv_path, 'w') as f:
+        f.write("id,image_file,caption"+"\n")
+        for imageTitle in imageTitleToCaption:
+            caption = imageTitleToCaption[imageTitle]
+            imageId = imageTitleToImageIdOASIS[imageTitle]
+            f.write(imageId+delimeter+imageTitle+delimeter+caption+"\n")
+
+def get_image_id_to_caption(caption_csv_path, delimeter=","):
     """read caption csv into dataframe and return {imageid : caption}"""
     caption_df = read_caption_csv_into_dataframe(caption_csv_path, delimeter)
     imageIdToCaption = dict(zip(caption_df.id, caption_df.caption))
-    # Transform imageId to be compliant with OASIS imageId, append "I" to the beginning
-    imageIdToCaptionTransformed = {}
-    for imageId in imageIdToCaption:
-        caption = imageIdToCaption[imageId]
-        newImageId = str(imageId)
-        if "I" not in str(imageId):
-            newImageId = "I" + str(imageId)
-        imageIdToCaptionTransformed[newImageId] = caption 
-    return imageIdToCaptionTransformed
+    return imageIdToCaption
 
 def label_image_captions(imageIdToCaption):
     """given {imageId : caption}, return {imageId : label} using VADER"""
@@ -102,6 +109,7 @@ def get_vader_compound_scores(imageIdToCaption):
     vaderScores = []
     for imageId in imageIdToCaption:
         caption = imageIdToCaption[imageId]
+        #print(imageId,caption)
         vaderScores.append(get_vader_compound_score_per_caption(caption))
     return vaderScores
 
