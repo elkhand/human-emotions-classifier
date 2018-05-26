@@ -102,3 +102,6 @@ ENV/
 
 dataset/images/
 #dataset/metadata/caption.csv
+embedding/
+model/
+dataset/caption-lstm/

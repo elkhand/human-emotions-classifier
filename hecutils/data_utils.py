@@ -34,13 +34,43 @@ def read_oasis_csv_into_dataframe(oasis_csv_path):
                                                 "valence_mean","valence_std", "valence_n",
                                                "arousal_mean","arousal_std", "arousal_n",]) #,  index_col="id"
 
+def create_caption_to_label(oasis_csv_path,caption_csv_path, output_caption_to_label_csv_path, neutralLow, neutralHigh, delimeter="|"):
+    """create new csv file {caption, label}"""
+    imageIdToValence = get_image_id_to_valence_mean(oasis_csv_path)
+    imageIdToCaption = get_image_id_to_caption(caption_csv_path, delimeter)
+    with open(output_caption_to_label_csv_path, 'w') as f:
+        f.write("caption"+delimeter+"label"+"\n")
+        for imageId in imageIdToValence:
+            caption = imageIdToCaption[imageId]
+            valence = imageIdToValence[imageId]
+            label = sc.evaluate_score(valence,True, neutralLow, neutralHigh)
+            label = label.lower()
+            f.write(caption + delimeter + label +"\n")
+
+
+def read_caption_to_label_csv_into_dataframe(caption_to_label_csv_path, delimeter="|"):
+    """read caption.csv into data frame"""
+    return pd.read_csv(caption_to_label_csv_path, header=0, names=["caption","label"],  sep=delimeter)
+
 def read_caption_csv_into_dataframe(caption_csv_path, delimeter=","):
     """read caption.csv into data frame"""
     return pd.read_csv(caption_csv_path, header=0, names=["id","image_title","caption"],  sep=delimeter)
 
 def get_caption_to_label(caption_csv_path,delimeter=","):
     imageIdToCaption = get_image_id_to_caption(caption_csv_path,delimeter)
-    imageIdToLabel = label_image_captions(imageIdToCaption)
+    imageIdToLabel = label_image_captions_using_vader(imageIdToCaption)
+    captionToLabel = {}
+    for imageId in imageIdToCaption:
+        caption = imageIdToCaption[imageId]
+        label = imageIdToLabel[imageId]
+        if caption not in captionToLabel:
+            captionToLabel[caption] = []
+        captionToLabel[caption].append(label)
+    return labelToCaption
+
+def get_label_to_caption(caption_csv_path,delimeter=","):
+    imageIdToCaption = get_image_id_to_caption(caption_csv_path,delimeter)
+    imageIdToLabel = label_image_captions_using_vader(imageIdToCaption)
     labelToCaption = {}
     for imageId in imageIdToCaption:
         caption = imageIdToCaption[imageId]
@@ -49,7 +79,6 @@ def get_caption_to_label(caption_csv_path,delimeter=","):
             labelToCaption[label] = []
         labelToCaption[label].append(caption)
     return labelToCaption
-
 
 def get_image_id_to_valence_mean(oasis_csv_path):
     """read OASIS.csv into data frame and return {imageId : valence_mean}"""
@@ -88,7 +117,7 @@ def get_image_id_to_caption(caption_csv_path, delimeter=","):
     imageIdToCaption = dict(zip(caption_df.id, caption_df.caption))
     return imageIdToCaption
 
-def label_image_captions(imageIdToCaption):
+def label_image_captions_using_vader(imageIdToCaption):
     """given {imageId : caption}, return {imageId : label} using VADER"""
     imageIdToLabel = {}
     skipCount = 0
