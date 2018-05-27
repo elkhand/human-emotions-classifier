@@ -105,3 +105,4 @@ dataset/images/
 embedding/
 model/
 dataset/caption-lstm/
+custom-model/
