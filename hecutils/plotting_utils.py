@@ -171,7 +171,7 @@ def grid_display(list_of_images, list_of_titles=[], no_of_columns=2, figsize=(10
             plt.title(list_of_titles[i])    
 
 
-def plot_model_accuracy(history, hasF1):
+def plot_model_accuracy(history, modelDir, hasF1=False):
     """plot acc and loss for train and val"""
     import hecutils.data_utils as dt
     filename = "hec" 
@@ -196,7 +196,7 @@ def plot_model_accuracy(history, hasF1):
     plt.xlabel('epoch')
     plt.legend(['train', 'validation'], loc='upper left')
     plt.show()
-    fig.savefig("model/" + filename + ".png") 
+    fig.savefig(modelDir + "/" + filename + ".png") 
     
     # "Loss"
     fig = plt.figure()
@@ -209,4 +209,4 @@ def plot_model_accuracy(history, hasF1):
     plt.xlabel('epoch')
     plt.legend(['train', 'validation'], loc='upper left')
     plt.show()
-    fig.savefig("model/" + filename + ".png")             
+    fig.savefig(modelDir + "/" + filename + ".png")             
