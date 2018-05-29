@@ -9,12 +9,44 @@ import pandas as pd
 import numpy as np
 import math
 import os
+import time
+from shutil import copyfile
+from shutil import rmtree
 
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 
+## Separating data into train and dev using cross validation
+
+
+def create_cross_validation_train_val(groupName, all_images_dir, outputDir, image_names, image_labels):
+    """groupName is either train or val"""
+    print("all_images_dir",all_images_dir)
+    print("outputDir",outputDir)
+    print("groupName",groupName)
+    rmtree(outputDir + "/" + groupName, ignore_errors=True)#
+    # Create corresponding folders
+    for label in set(image_labels):
+        directory = outputDir+"/"+groupName+"/"+label
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+    
+    for image_name, label in zip(image_names, image_labels):
+        src = all_images_dir+"/"+image_name
+        dst = outputDir+"/"+groupName+"/"+label+"/"+image_name
+        copyfile(src, dst)
+        
+    for label in set(image_labels):
+        folder = outputDir+"/"+groupName+"/"+label
+        print(folder,"\t",len([name for name in os.listdir(folder) if os.path.isfile(os.path.join(folder, name))]))    
+
+def generate_model_name(filename, best_acc_val):
+    timestamp = str(time.time()).split(".")[0]
+    best_acc_val = round(best_acc_val,4)
+    filename += "-" + str(best_acc_val) + "-" + timestamp
+    return filename
 
 def print_polarity_scores(image_captions):
     analyzer = SentimentIntensityAnalyzer()
@@ -27,6 +59,20 @@ def print_polarity_scores(image_captions):
         captionToLabels[caption] = label
     return captionToLabels        
 
+
+def get_image_name_and_label(oasis_csv_path, neutralLow, neutralHigh):
+    image_names = []
+    image_labels = []
+    imageIdToValence = get_image_id_to_valence_mean(oasis_csv_path)
+    imageIdToImageName = get_image_id_to_image_title(oasis_csv_path)
+    for imageId in imageIdToImageName:
+        image_name = imageIdToImageName[imageId] + ".jpg"
+        valence = imageIdToValence[imageId]
+        label = sc.evaluate_score(valence,True, neutralLow, neutralHigh)
+        label = label.lower()
+        image_names.append(image_name)
+        image_labels.append(label)
+    return (image_names, image_labels)
 
 def read_oasis_csv_into_dataframe(oasis_csv_path):
     """read OASIS.csv into data frame"""

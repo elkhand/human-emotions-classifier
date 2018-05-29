@@ -11,6 +11,7 @@ from sklearn import svm, datasets
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 
+import time
 from PIL import Image
 
 #import hecutils.scoring_utils as sc
@@ -90,6 +91,16 @@ def get_label_count(imageIdToLabel):
 	return labelToCount
 
 
+def get_label_count(labelsList):
+    """input is imageIdToLabel, returns {label: count}"""
+    labelToCount = {}
+    for label in labelsList:
+        if label not in labelToCount:
+            labelToCount[label] = 1
+        else:
+            labelToCount[label] += 1
+    return labelToCount
+
 def plot_confusion_matrix_from_labels(trueLabels,predictedLabels, titleOfConfusionMatrix):
 	"""plot confusion matrix"""
 	#print("true labels",trueLabels)
@@ -158,3 +169,44 @@ def grid_display(list_of_images, list_of_titles=[], no_of_columns=2, figsize=(10
         plt.axis('off')
         if len(list_of_titles) >= len(list_of_images):
             plt.title(list_of_titles[i])    
+
+
+def plot_model_accuracy(history, hasF1):
+    """plot acc and loss for train and val"""
+    import hecutils.data_utils as dt
+    filename = "hec" 
+    filename = dt.generate_model_name(filename + "-acc", max(history.history['val_acc']))
+    fig = plt.figure()
+    val_acc_list = history.history['val_acc']
+    best_val_acc =  max(val_acc_list)
+    print("best_train_acc", max(history.history['acc']))
+    print("best_val_acc", best_val_acc)
+    
+    if hasF1:
+        val_f1_list = history.history['val_f1']
+        best_f1 =  max(val_f1_list)
+        print("best_f1", best_f1)
+        print("best_train_f1", max(history.history['f1']))
+    
+    #  "Accuracy"
+    plt.plot(history.history['acc'])
+    plt.plot(history.history['val_acc'])
+    plt.title('model accuracy')
+    plt.ylabel('accuracy')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'validation'], loc='upper left')
+    plt.show()
+    fig.savefig("model/" + filename + ".png") 
+    
+    # "Loss"
+    fig = plt.figure()
+    filename = "hec" 
+    filename = dt.generate_model_name(filename + "-loss", min(history.history['val_loss']))
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('model loss')
+    plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.legend(['train', 'validation'], loc='upper left')
+    plt.show()
+    fig.savefig("model/" + filename + ".png")             

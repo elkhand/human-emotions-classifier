@@ -106,3 +106,8 @@ embedding/
 model/
 dataset/caption-lstm/
 custom-model/
+preview/
+img_model/
+dataset/grouped-3-classes/
+dataset/grouped-2-classes/
+dataset/grouped/
