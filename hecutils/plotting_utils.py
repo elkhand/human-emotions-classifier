@@ -14,6 +14,7 @@ from sklearn.metrics import confusion_matrix
 import time
 from PIL import Image
 
+
 #import hecutils.scoring_utils as sc
 #import hecutils.data_utils as dt
 
@@ -88,7 +89,7 @@ def get_label_count(imageIdToLabel):
 			labelToCount[label] = 1
 		else:
 			labelToCount[label] += 1
-	return labelToCount
+	return OrderedDict(sorted(labelToCount.items()))
 
 
 def get_label_count(labelsList):
@@ -99,7 +100,7 @@ def get_label_count(labelsList):
             labelToCount[label] = 1
         else:
             labelToCount[label] += 1
-    return labelToCount
+    return OrderedDict(sorted(labelToCount.items()))
 
 def plot_confusion_matrix_from_labels(trueLabels,predictedLabels, titleOfConfusionMatrix):
 	"""plot confusion matrix"""

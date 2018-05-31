@@ -23,9 +23,9 @@ from nltk.tokenize import word_tokenize
 
 def create_cross_validation_train_val(groupName, all_images_dir, outputDir, image_names, image_labels):
     """groupName is either train or val"""
-    print("all_images_dir",all_images_dir)
-    print("outputDir",outputDir)
-    print("groupName",groupName)
+    #print("all_images_dir",all_images_dir)
+    #print("outputDir",outputDir)
+    #print("groupName",groupName)
     rmtree(outputDir + "/" + groupName, ignore_errors=True)#
     # Create corresponding folders
     for label in set(image_labels):
@@ -34,13 +34,17 @@ def create_cross_validation_train_val(groupName, all_images_dir, outputDir, imag
             os.makedirs(directory)
     
     for image_name, label in zip(image_names, image_labels):
+        # if image_name == "Monkey 3.jpg":
+        #     print(" \n === 2 Skipping: ", image_name)
+        #     continue
         src = all_images_dir+"/"+image_name
         dst = outputDir+"/"+groupName+"/"+label+"/"+image_name
         copyfile(src, dst)
         
-    for label in set(image_labels):
-        folder = outputDir+"/"+groupName+"/"+label
-        print(folder,"\t",len([name for name in os.listdir(folder) if os.path.isfile(os.path.join(folder, name))]))    
+    # for label in set(image_labels):
+    #     folder = outputDir+"/"+groupName+"/"+label
+    #     print(folder,"\t",len([name for name in os.listdir(folder) if os.path.isfile(os.path.join(folder, name))]))    
+    
 
 def generate_model_name(filename, best_acc_val):
     timestamp = str(time.time()).split(".")[0]
@@ -67,6 +71,9 @@ def get_image_name_and_label(oasis_csv_path, neutralLow, neutralHigh):
     imageIdToImageName = get_image_id_to_image_title(oasis_csv_path)
     for imageId in imageIdToImageName:
         image_name = imageIdToImageName[imageId] + ".jpg"
+        # if image_name == "Monkey 3.jpg":
+        #     print(" \n === Skipping: ", image_name)
+        #     continue
         valence = imageIdToValence[imageId]
         label = sc.evaluate_score(valence,True, neutralLow, neutralHigh)
         label = label.lower()
