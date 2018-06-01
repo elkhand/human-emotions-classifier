@@ -21,15 +21,18 @@ from nltk.tokenize import word_tokenize
 ## Separating data into train and dev using cross validation
 
 
-def create_cross_validation_train_val(groupName, all_images_dir, outputDir, image_names, image_labels):
+def create_dataset(groupName, all_images_dir, outputDir, image_names, image_labels, isForTest):
     """groupName is either train or val"""
     #print("all_images_dir",all_images_dir)
     #print("outputDir",outputDir)
     #print("groupName",groupName)
-    rmtree(outputDir + "/" + groupName, ignore_errors=True)#
+    dst_root = outputDir + "/" + groupName + "/"
+    if isForTest:
+        dst_root = outputDir + "/"
+    rmtree(dst_root, ignore_errors=True)#
     # Create corresponding folders
     for label in set(image_labels):
-        directory = outputDir+"/"+groupName+"/"+label
+        directory = dst_root+"/"+label
         if not os.path.exists(directory):
             os.makedirs(directory)
     
@@ -38,13 +41,13 @@ def create_cross_validation_train_val(groupName, all_images_dir, outputDir, imag
         #     print(" \n === 2 Skipping: ", image_name)
         #     continue
         src = all_images_dir+"/"+image_name
-        dst = outputDir+"/"+groupName+"/"+label+"/"+image_name
+        dst = dst_root + "/" + label + "/" + image_name
         copyfile(src, dst)
         
     # for label in set(image_labels):
     #     folder = outputDir+"/"+groupName+"/"+label
     #     print(folder,"\t",len([name for name in os.listdir(folder) if os.path.isfile(os.path.join(folder, name))]))    
-    
+
 
 def generate_model_name(filename, best_acc_val):
     timestamp = str(time.time()).split(".")[0]

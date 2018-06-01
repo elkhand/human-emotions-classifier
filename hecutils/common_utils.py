@@ -53,6 +53,18 @@ def get_data_generator(dataDir, config, isForTrain):
 	            batch_size=config['batch_size'],
 	            class_mode='categorical',
 	            shuffle=isForTrain)  
+
+def get_data_generator_for_test(dataDir, config):
+	image_augmenter = ImageDataGenerator(preprocessing_function=preprocess_input)
+	return image_augmenter.flow_from_directory(
+	            dataDir,  
+	            target_size=(config['img_height'], config['img_width']), 
+	            #interpolation='bicubic', 
+	            batch_size=config['batch_size'],
+	            class_mode='categorical',  # only data, no labels
+	            shuffle=False)  # keep data in same order as labels
+
+
 def get_metrics(useF1Score):
 	if useF1Score:
 		metrics=['accuracy', pt.f1, pt.recall, pt.precision]
