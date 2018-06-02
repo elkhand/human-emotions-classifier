@@ -1,7 +1,8 @@
 from shutil import copyfile, rmtree
 import os, glob
 from keras.preprocessing.image import ImageDataGenerator
-from keras.applications.inception_resnet_v2 import preprocess_input
+from keras.applications.imagenet_utils import preprocess_input
+#from keras.applications.inception_resnet_v2 import preprocess_input
 
 def printXy(X,y):
     print("===============================")
@@ -31,21 +32,24 @@ def get_nb_files(directory):
 
 def getImageDataGenerator():
 	# data prep
-	return ImageDataGenerator(preprocessing_function=preprocess_input,
-                                   rotation_range=40,
-                                   width_shift_range=0.2,
-                                   height_shift_range=0.2,
-                                   shear_range=0.2,
-                                   zoom_range=0.2,
-                                   channel_shift_range=10,
-                                   horizontal_flip=True,
-								   fill_mode='nearest')
+	return ImageDataGenerator(
+							preprocessing_function=preprocess_input,
+                            rotation_range=40,
+                            width_shift_range=0.2,
+                            height_shift_range=0.2,
+                            shear_range=0.2,
+                            zoom_range=0.2,
+                            channel_shift_range=10,
+                            horizontal_flip=True,
+							fill_mode='nearest')
 
 def get_data_generator(dataDir, config, isForTrain):
 	if isForTrain:
 		image_augmenter = getImageDataGenerator()
 	else:
-		image_augmenter = ImageDataGenerator(preprocessing_function=preprocess_input)
+		image_augmenter = ImageDataGenerator(
+				preprocessing_function=preprocess_input
+			)
 	return image_augmenter.flow_from_directory(
 	            dataDir,  
 	            target_size=(config['img_height'], config['img_width']), 
@@ -55,7 +59,9 @@ def get_data_generator(dataDir, config, isForTrain):
 	            shuffle=isForTrain)  
 
 def get_data_generator_for_test(dataDir, config):
-	image_augmenter = ImageDataGenerator(preprocessing_function=preprocess_input)
+	image_augmenter = ImageDataGenerator(
+			preprocessing_function=preprocess_input
+		)
 	return image_augmenter.flow_from_directory(
 	            dataDir,  
 	            target_size=(config['img_height'], config['img_width']), 
