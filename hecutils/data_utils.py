@@ -95,13 +95,13 @@ def create_caption_to_label(oasis_csv_path,caption_csv_path, output_caption_to_l
     imageIdToValence = get_image_id_to_valence_mean(oasis_csv_path)
     imageIdToCaption = get_image_id_to_caption(caption_csv_path, delimeter)
     with open(output_caption_to_label_csv_path, 'w') as f:
-        f.write("caption"+delimeter+"label"+"\n")
+        f.write("imageId" + delimeter + "caption" + delimeter + "label"+"\n")
         for imageId in imageIdToValence:
             caption = imageIdToCaption[imageId]
             valence = imageIdToValence[imageId]
             label = sc.evaluate_score(valence,True, neutralLow, neutralHigh)
             label = label.lower()
-            f.write(caption + delimeter + label +"\n")
+            f.write(imageId + delimeter +caption + delimeter + label +"\n")
 
 
 def read_caption_to_label_csv_into_dataframe(caption_to_label_csv_path, delimeter="|"):

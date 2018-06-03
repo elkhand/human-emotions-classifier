@@ -78,10 +78,10 @@ def get_metrics(useF1Score):
 		metrics=['accuracy']
 	return metrics
 
-def conver_predictions_to_classes(predictions, label_map_from_train_gen):
+def conver_predictions_to_classes(predictions, class_to_index):
     predictions = np.argmax(predictions, axis=-1) #multiple categories
-    label_map_from_train_gen = dict((int(v),int(k)) for k,v in label_map_from_train_gen.items()) #flip k,v
-    predictions = [label_map_from_train_gen[k] for k in predictions]
+    index_to_class = dict((int(v),int(k)) for k,v in class_to_index.items()) #flip k,v
+    predictions = [index_to_class[k] for k in predictions]
     return predictions
 
 def get_label_map_from_train_generator(config):
