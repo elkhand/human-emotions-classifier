@@ -2,7 +2,7 @@ from shutil import copyfile, rmtree
 import os, glob
 from keras.preprocessing.image import ImageDataGenerator
 from keras.applications.imagenet_utils import preprocess_input
-#from keras.applications.inception_resnet_v2 import preprocess_input
+import numpy as np
 
 def printXy(X,y):
     print("===============================")
@@ -77,3 +77,27 @@ def get_metrics(useF1Score):
 	else:
 		metrics=['accuracy']
 	return metrics
+
+def conver_predictions_to_classes(predictions, label_map_from_train_gen):
+    predictions = np.argmax(predictions, axis=-1) #multiple categories
+    label_map_from_train_gen = dict((int(v),int(k)) for k,v in label_map_from_train_gen.items()) #flip k,v
+    predictions = [label_map_from_train_gen[k] for k in predictions]
+    return predictions
+
+def get_label_map_from_train_generator(config):
+    trainDir = input_images_classified + "/" + "train" + "/"
+    isForTrain = True
+    config['batch_size'] = batch_size
+    train_batches = cm.get_data_generator(trainDir, config, isForTrain)  
+    return train_batches.class_indices
+
+def get_truth_labels_test_data(test_filenames):
+    y_true = []
+    for test_file_name in test_filenames:
+        # 'negative/Ambulance 1.jpg'
+        label, test_file_name = test_file_name.split("/")
+        assert label == imageNameToLabel[test_file_name], \
+                "test_file_name did not match: " + test_file_name + \
+                "\t imageNameToLabel:" + imageNameToLabel[test_file_name]                                                    
+        y_true.append(imageNameToLabel[test_file_name])
+    return y_true	
