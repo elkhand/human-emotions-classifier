@@ -114,3 +114,5 @@ dataset/grouped-2-classes/
 dataset/grouped/
 dataset/input*
 dataset/test*
+logs/
+model/logs/
