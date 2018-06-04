@@ -67,22 +67,7 @@ def print_polarity_scores(image_captions):
     return captionToLabels        
 
 
-def get_image_name_and_label(oasis_csv_path, neutralLow, neutralHigh):
-    image_names = []
-    image_labels = []
-    imageIdToValence = get_image_id_to_valence_mean(oasis_csv_path)
-    imageIdToImageName = get_image_id_to_image_title(oasis_csv_path)
-    for imageId in imageIdToImageName:
-        image_name = imageIdToImageName[imageId] + ".jpg"
-        # if image_name == "Monkey 3.jpg":
-        #     print(" \n === Skipping: ", image_name)
-        #     continue
-        valence = imageIdToValence[imageId]
-        label = sc.evaluate_score(valence,True, neutralLow, neutralHigh)
-        label = label.lower()
-        image_names.append(image_name)
-        image_labels.append(label)
-    return (image_names, image_labels)
+
 
 def read_oasis_csv_into_dataframe(oasis_csv_path):
     """read OASIS.csv into data frame"""
@@ -90,13 +75,29 @@ def read_oasis_csv_into_dataframe(oasis_csv_path):
                                                 "valence_mean","valence_std", "valence_n",
                                                "arousal_mean","arousal_std", "arousal_n",]) #,  index_col="id"
 
+
+def get_image_name_and_label(oasis_csv_path, neutralLow, neutralHigh):
+    image_names = []
+    image_labels = []
+    imageIdToValence = get_image_id_to_valence_mean(oasis_csv_path)
+    imageIdToImageName = get_image_id_to_image_title(oasis_csv_path)
+    for imageId in sorted(imageIdToValence.keys()):
+        image_name = imageIdToImageName[imageId] + ".jpg"
+        valence = imageIdToValence[imageId]
+        label = sc.evaluate_score(valence,True, neutralLow, neutralHigh)
+        label = label.lower()
+        image_names.append(image_name)
+        image_labels.append(label)
+    return (image_names, image_labels)
+
+
 def create_caption_to_label(oasis_csv_path,caption_csv_path, output_caption_to_label_csv_path, neutralLow, neutralHigh, delimeter="|"):
     """create new csv file {caption, label}"""
     imageIdToValence = get_image_id_to_valence_mean(oasis_csv_path)
     imageIdToCaption = get_image_id_to_caption(caption_csv_path, delimeter)
     with open(output_caption_to_label_csv_path, 'w') as f:
         f.write("imageId" + delimeter + "caption" + delimeter + "label"+"\n")
-        for imageId in imageIdToValence:
+        for imageId in sorted(imageIdToValence.keys()):
             caption = imageIdToCaption[imageId]
             valence = imageIdToValence[imageId]
             label = sc.evaluate_score(valence,True, neutralLow, neutralHigh)
@@ -146,6 +147,12 @@ def get_image_title_to_image_id(oasis_csv_path):
     oasis_df = read_oasis_csv_into_dataframe(oasis_csv_path)
     return dict(zip(oasis_df.theme,oasis_df.id))
 
+
+def get_image_id_to_image_title_as_df(oasis_csv_path):
+    """read OASIS.csv into data frame and return {imageTitle : imageId}"""
+    oasis_df = read_oasis_csv_into_dataframe(oasis_csv_path)
+    oasis_df = oasis_df[["id","theme"]] 
+    return oasis_df
 
 def get_image_id_to_image_title(oasis_csv_path):
     """read OASIS.csv into data frame and return {imageTitle : imageId}"""

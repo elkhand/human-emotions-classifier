@@ -116,3 +116,10 @@ dataset/input*
 dataset/test*
 logs/
 model/logs/
+model*/
+input*/
+test*/
+img_model*/
+dataset/input*/
+dataset/test*/
+dataset/caption-lstm/
