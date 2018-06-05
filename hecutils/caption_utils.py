@@ -95,6 +95,8 @@ def change_label_str_to_int(labelStr):
         return 0
     elif  labelStr == "positive":
         return 1
+    else:
+        raise "Unsupported label " + labelStr
 
 def get_label_map_from_train_set(dfInput, wordToVec, max_seq_len, config):
     class_to_index = {}

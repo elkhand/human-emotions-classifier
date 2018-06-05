@@ -84,12 +84,21 @@ def conver_predictions_to_classes(predictions, class_to_index):
     predictions = [index_to_class[k] for k in predictions]
     return predictions
 
-def get_label_map_from_train_generator(config):
+def get_label_map_from_train_generator(input_images_classified, config):
+    """this returns class_to_index : {'negative': 0, 'neutral': 1, 'positive': 2}"""
     trainDir = input_images_classified + "/" + "train" + "/"
     isForTrain = True
-    config['batch_size'] = batch_size
-    train_batches = cm.get_data_generator(trainDir, config, isForTrain)  
+    train_batches = get_data_generator(trainDir, config, isForTrain)  
     return train_batches.class_indices
+
+def convert_class_to_index_into_int(class_to_index):
+	import hecutils.caption_utils as caput
+	result = {}
+	for str_label in class_to_index:
+		int_label = caput.change_label_str_to_int(class_to_index)
+		result[int_label] = class_to_index[str_label]
+	return result
+
 
 def get_truth_labels_test_data(test_filenames):
     y_true = []
