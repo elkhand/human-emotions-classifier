@@ -95,18 +95,21 @@ def convert_class_to_index_into_int(class_to_index):
 	import hecutils.caption_utils as caput
 	result = {}
 	for str_label in class_to_index:
-		int_label = caput.change_label_str_to_int(class_to_index)
+		int_label = caput.change_label_str_to_int(str_label)
 		result[int_label] = class_to_index[str_label]
 	return result
 
 
-def get_truth_labels_test_data(test_filenames):
-    y_true = []
-    for test_file_name in test_filenames:
-        # 'negative/Ambulance 1.jpg'
-        label, test_file_name = test_file_name.split("/")
-        assert label == imageNameToLabel[test_file_name], \
-                "test_file_name did not match: " + test_file_name + \
-                "\t imageNameToLabel:" + imageNameToLabel[test_file_name]                                                    
-        y_true.append(imageNameToLabel[test_file_name])
-    return y_true	
+def get_truth_labels_test_data(test_filenames, imageNameToLabel={}):
+	import hecutils.caption_utils as caput
+	y_true = []
+	# 'negative/Ambulance 1.jpg'
+	for test_file_name in test_filenames:
+		# 'negative/Ambulance 1.jpg'
+		label, test_file_name = test_file_name.split("/")
+		if len(imageNameToLabel.keys()) > 0:
+			assert label == imageNameToLabel[test_file_name], \
+				"test_file_name did not match: " + test_file_name + \
+				"\t imageNameToLabel:" + imageNameToLabel[test_file_name]
+		y_true.append(caput.change_label_str_to_int(imageNameToLabel[test_file_name]))
+	return y_true	
