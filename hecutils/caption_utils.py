@@ -54,9 +54,12 @@ def load_dataset_StratifiedKFold(dfKFold, wordToVec, max_seq_len, class_to_index
     sentences = []
     label_index = []
     num_of_classes = 0
+    filenames = []
     for index, row in dfKFold.iterrows():
         caption = row['caption']
         label = row['label']
+        fname = row['image_name']
+        filenames.append(fname)
         words = caption.split(" ")
         words = get_non_stop_words(words)
         sentence_embedding = get_sequence_embedding(wordToVec, words, max_seq_len, config)
@@ -70,7 +73,7 @@ def load_dataset_StratifiedKFold(dfKFold, wordToVec, max_seq_len, class_to_index
             label_index.append(class_to_index[label])
     X_train = np.array(sentences)
     y_train = np.array(label_index)
-    return (X_train, y_train, num_of_classes, class_to_index, index_to_class)
+    return (X_train, y_train, num_of_classes, class_to_index, index_to_class,filenames)
 
 
 def get_non_stop_word_count(words):
@@ -98,15 +101,15 @@ def change_label_str_to_int(labelStr):
     else:
         raise "Unsupported label " + labelStr
 
-def get_label_map_from_train_set(dfInput, wordToVec, max_seq_len, config):
-    class_to_index = {}
-    index_to_class = {}
-    _, _, num_of_classes, class_to_index, index_to_class = \
-            load_dataset_StratifiedKFold(
-                            dfInput,
-                            wordToVec, 
-                            max_seq_len, 
-                            class_to_index, 
-                            index_to_class,
-                            config)
-    return  (num_of_classes, class_to_index, index_to_class)
+# def get_label_map_from_train_set(dfInput, wordToVec, max_seq_len, config):
+#     class_to_index = {}
+#     index_to_class = {}
+#     _, _, num_of_classes, class_to_index, index_to_class = \
+#             load_dataset_StratifiedKFold(
+#                             dfInput,
+#                             wordToVec, 
+#                             max_seq_len, 
+#                             class_to_index, 
+#                             index_to_class,
+#                             config)
+#     return  (num_of_classes, class_to_index, index_to_class)
