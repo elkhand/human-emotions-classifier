@@ -32,7 +32,7 @@ def create_dataset(groupName, all_images_dir, outputDir, image_names, image_labe
     rmtree(dst_root, ignore_errors=True)#
     # Create corresponding folders
     for label in set(image_labels):
-        directory = dst_root+"/"+label
+        directory = dst_root + "/" + str(label)
         if not os.path.exists(directory):
             os.makedirs(directory)
     
@@ -41,7 +41,7 @@ def create_dataset(groupName, all_images_dir, outputDir, image_names, image_labe
         #     print(" \n === 2 Skipping: ", image_name)
         #     continue
         src = all_images_dir+"/"+image_name
-        dst = dst_root + "/" + label + "/" + image_name
+        dst = dst_root + "/" + str(label) + "/" + image_name
         copyfile(src, dst)
         
     # for label in set(image_labels):

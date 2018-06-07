@@ -72,8 +72,9 @@ def get_data_generator_for_test(dataDir, config):
 
 
 def get_metrics(useF1Score):
+	import hecutils.scoring_utils as sc
 	if useF1Score:
-		metrics=['accuracy', pt.f1, pt.recall, pt.precision]
+		metrics=['accuracy', sc.f1, sc.recall, sc.precision]
 	else:
 		metrics=['accuracy']
 	return metrics
@@ -108,8 +109,9 @@ def get_truth_labels_test_data(test_filenames, imageNameToLabel={}):
 		# 'negative/Ambulance 1.jpg'
 		label, test_file_name = test_file_name.split("/")
 		if len(imageNameToLabel.keys()) > 0:
-			assert label == imageNameToLabel[test_file_name], \
+			assert label == str(imageNameToLabel[test_file_name]), \
 				"test_file_name did not match: " + test_file_name + \
 				"\t imageNameToLabel:" + imageNameToLabel[test_file_name]
-		y_true.append(caput.change_label_str_to_int(imageNameToLabel[test_file_name]))
+		#y_true.append(caput.change_label_str_to_int(imageNameToLabel[test_file_name]))
+		y_true.append(imageNameToLabel[test_file_name])
 	return y_true	
