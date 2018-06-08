@@ -58,8 +58,9 @@ def load_dataset_StratifiedKFold(dfKFold, wordToVec, max_seq_len, class_to_index
     for index, row in dfKFold.iterrows():
         caption = row['caption']
         label = row['label']
-        fname = row['image_name']
-        filenames.append(fname)
+        if 'image_name' in row:
+            fname = row['image_name']
+            filenames.append(fname)
         words = caption.split(" ")
         words = get_non_stop_words(words)
         sentence_embedding = get_sequence_embedding(wordToVec, words, max_seq_len, config)
