@@ -49,14 +49,10 @@ def get_accuracy(imageIdToLabel, imageIdToLabelFromCaptions, titleOfConfusionMat
     totalNeut = 0
     total = len(imageIdToLabelFromCaptions.keys())
     f1Dict={}
-    #f1Dict["TP"] =
     for imageId in imageIdToLabelFromCaptions.keys():
-        #print("imageId",imageId)
         labelFromCaption = imageIdToLabelFromCaptions[imageId]
         trueLabel = imageIdToLabel[imageId]
         incr = compare_labels(labelFromCaption,trueLabel)
-        #if incr == 0:
-        #    print(imageId)
         totalCorrect += incr
         if labelFromCaption == 1:
             totalPos += 1
@@ -68,15 +64,14 @@ def get_accuracy(imageIdToLabel, imageIdToLabelFromCaptions, titleOfConfusionMat
             totalNeg += 1
             negCorrect += incr
     y_true, y_pred = get_labels(imageIdToLabel, imageIdToLabelFromCaptions)
-    f1Score = f1_score(y_true, y_pred, average=None)
+    f1Score = f1_score(y_true, y_pred, average='weighted')# None
     pt.plot_confusion_matrix_from_labels(y_true, y_pred, titleOfConfusionMatrix)
-    #print("labels in f1 score are in this order [negative, neutral, positive]")
-    # labels in f1 score are in this order [negative, neutral, positive]
     result = { "total_accuracy": totalCorrect*100/total ,"pos_accuracy":posCorrect*100/totalPos,
              "neg_accuracy": negCorrect*100/totalNeg, "neutral_accuracy": neutCorrect*100/totalNeg}
-    result["f1_score_neg"] = f1Score[0]
-    result["f1_score_neut"] = f1Score[1]
-    result["f1_score_pos"] = f1Score[2]
+    # result["f1_score_neg"] = f1Score[0]
+    # result["f1_score_neut"] = f1Score[1]
+    # result["f1_score_pos"] = f1Score[2]
+    result['f1'] = f1Score
     return result
 
 def print_f1_score(f1ScoreDict):

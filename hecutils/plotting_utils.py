@@ -80,7 +80,7 @@ def image_label_histogram(oasis_csv_path, neutralLow,neutralHigh):
 
     return [labelToCount, imageIdToLabel, imageIdToValence]
 
-def get_label_count(imageIdToLabel):
+def get_label_count_from_dict(imageIdToLabel):
 	"""input is imageIdToLabel, returns {label: count}"""
 	labelToCount = {}
 	for imageId in imageIdToLabel:
