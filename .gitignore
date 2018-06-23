@@ -123,3 +123,4 @@ img_model*/
 dataset/input*/
 dataset/test*/
 dataset/caption-lstm/
+logs/
